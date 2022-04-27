@@ -157,6 +157,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.voody.unileo.lite": {
+      "version": "https://github.com/voody2506/UniLeo-Lite.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3726d31b5acbdf683edb372ea1efb74a12321c17"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
