@@ -1,7 +1,6 @@
 ﻿using EcsLiteTestProject.Extensions;
 using Leopotam.EcsLite;
 using UnityEngine;
-using Zenject;
 
 namespace EcsLiteTestProject
 {

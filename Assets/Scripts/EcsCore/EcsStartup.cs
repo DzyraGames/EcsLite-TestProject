@@ -1,10 +1,9 @@
-using System;
+using EcsLiteTestProject.Data;
 using EcsLiteTestProject.Events;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
 using SevenBoldPencil.EasyEvents;
-using TMPro;
 using UnityEngine;
 using Voody.UniLeo.Lite;
 
@@ -12,31 +11,37 @@ namespace EcsLiteTestProject
 {
     public sealed class EcsStartup : MonoBehaviour
     {
+        #region SharedData
+
+        [SerializeField] private Transform _playerTransform;
+        [SerializeField] private PlayerData _playerData;
+
+        #endregion
+        
         private EcsWorld _world;
-        private EcsSystems _updateSystems;
+        private EcsSystems _systems;
         private EcsSystems _fixedSystems;
         private SharedData _sharedData;
 
         private void Start()
         {
             _world = new EcsWorld();
-            _sharedData = new SharedData
-            {
-                EventsBus = new EventsBus()
-            };
+            InitSharedData();
             
-            _updateSystems = new EcsSystems(_world, _sharedData);
+            _systems = new EcsSystems(_world, _sharedData);
             _fixedSystems = new EcsSystems(_world, _sharedData);
             EcsPhysicsEvents.ecsWorld = _world;
 
+            AddInitSystems();
             AddFixedSystems();
-            AddUpdateSystems();
+            AddPhysicsEvents();
+            
+            AddSystems();
             AddEvents();
             
-            _updateSystems.ConvertScene();
-            _updateSystems.Init();
+            _systems.ConvertScene();
+            _systems.Init();
 
-            _fixedSystems.ConvertScene();
             _fixedSystems.Init();
         }
 
@@ -47,16 +52,33 @@ namespace EcsLiteTestProject
 
         private void Update()
         {
-            _updateSystems?.Run();
+            _systems?.Run();
         }
 
-        private void AddUpdateSystems()
+        private void InitSharedData()
+        {
+            _sharedData = new SharedData
+            {
+                EventsBus = new EventsBus(),
+                PlayerTransform = _playerTransform,
+                PlayerData = _playerData
+            };
+        }
+        
+        private void AddInitSystems()
+        {
+            _systems
+                .Add(new OpenDoorButtonInitSystem())
+                .Add(new PlayerInitSystem());
+        }
+        
+        private void AddSystems()
         {
 #if UNITY_EDITOR
-            _updateSystems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem());
+            _systems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem());
 #endif
 
-            _updateSystems
+            _systems
                 .Add(new MouseInputSystem())
                 .Add(new MoveToTargetSystem());
         }
@@ -69,17 +91,22 @@ namespace EcsLiteTestProject
         
         private void AddEvents()
         {
-            _updateSystems
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>())
+            _systems
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>());
+        }
+
+        private void AddPhysicsEvents()
+        {
+            _fixedSystems
                 .DelHere<OnTriggerEnterEvent>();
         }
 
         private void OnDestroy()
         {
-            if (_updateSystems != null)
+            if (_systems != null)
             {
-                _updateSystems.Destroy();
-                _updateSystems = null;
+                _systems.Destroy();
+                _systems = null;
 
                 _world.Destroy();
                 _world = null;

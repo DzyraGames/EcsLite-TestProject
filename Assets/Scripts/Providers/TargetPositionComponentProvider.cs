@@ -1,3 +1,4 @@
+using System;
 using Voody.UniLeo.Lite;
 
 namespace EcsLiteTestProject

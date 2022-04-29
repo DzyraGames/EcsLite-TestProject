@@ -1,9 +1,14 @@
-﻿using SevenBoldPencil.EasyEvents;
+﻿using EcsLiteTestProject.Data;
+using SevenBoldPencil.EasyEvents;
+using UnityEngine;
 
 namespace EcsLiteTestProject
 {
-    public struct SharedData
+    public class SharedData
     {
         public EventsBus EventsBus;
+        
+        public Transform PlayerTransform;
+        public PlayerData PlayerData;
     }
 }
