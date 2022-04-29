@@ -9,7 +9,7 @@ namespace EcsLiteTestProject
         private EcsWorld _world;
         private EcsFilter _filter;
 
-        private EcsPool<TargetMovePositionComponent> _targetPositionPool;
+        private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
 
         private Camera _camera;
         private Vector3 _targetPosition;
@@ -18,8 +18,8 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
 
-            _filter = _world.Filter<TargetMovePositionComponent>().Inc<PlayerTagComponent>().End();
-            _targetPositionPool = _world.GetPool<TargetMovePositionComponent>();
+            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<PlayerComponent>().End();
+            _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
             _camera = Camera.main;
         }
 
@@ -29,8 +29,8 @@ namespace EcsLiteTestProject
 
             foreach (int entity in _filter)
             {
-                ref TargetMovePositionComponent targetMovePositionComponent = ref _targetPositionPool.Get(entity);
-                targetMovePositionComponent.TargetPosition = _targetPosition;
+                ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionPool.Get(entity);
+                targetPositionMoveComponent.TargetPosition = _targetPosition;
             }
         }
 
@@ -41,7 +41,7 @@ namespace EcsLiteTestProject
                 Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
                 if (Physics.Raycast(ray, out RaycastHit hit, Constants.MaxRaycastDistance,
-                    LayerMask.GetMask(Constants.GroundLayerMask)))
+                    LayerMask.GetMask(Constants.LayerMasks.Ground)))
                 {
                     _targetPosition = hit.point;
                 }

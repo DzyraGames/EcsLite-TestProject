@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EcsLiteTestProject
 {
-    public struct TargetMovePositionComponent
+    public struct TargetPositionMoveComponent
     {
         public Vector3 TargetPosition;
     }

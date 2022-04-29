@@ -1,6 +1,6 @@
 ﻿namespace EcsLiteTestProject
 {
-    public struct PlayerTagComponent
+    public struct DoorComponent
     {
         
     }
