@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace EcsLiteTestProject.Extensions
+namespace EcsLiteTestProject
 {
     public static class Vector3Extensions
     {

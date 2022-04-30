@@ -1,6 +1,6 @@
 ﻿using SevenBoldPencil.EasyEvents;
 
-namespace EcsLiteTestProject.Events
+namespace EcsLiteTestProject
 {
     public struct ButtonPressedEvent : IEventReplicant
     {

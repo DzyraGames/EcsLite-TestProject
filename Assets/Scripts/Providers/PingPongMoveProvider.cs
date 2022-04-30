@@ -2,7 +2,7 @@
 
 namespace EcsLiteTestProject
 {
-    public struct DoorComponent
+    public class PingPongMoveProvider : MonoProvider<PingPongMoveComponent>
     {
         
     }

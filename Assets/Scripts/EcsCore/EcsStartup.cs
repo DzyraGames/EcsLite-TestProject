@@ -6,6 +6,7 @@ using Leopotam.EcsLite.ExtendedSystems;
 using SevenBoldPencil.EasyEvents;
 using UnityEngine;
 using Voody.UniLeo.Lite;
+using Debug = System.Diagnostics.Debug;
 
 namespace EcsLiteTestProject
 {
@@ -68,7 +69,6 @@ namespace EcsLiteTestProject
         private void AddInitSystems()
         {
             _systems
-                .Add(new OpenDoorButtonInitSystem())
                 .Add(new PlayerInitSystem());
         }
         
@@ -80,7 +80,8 @@ namespace EcsLiteTestProject
 
             _systems
                 .Add(new MouseInputSystem())
-                .Add(new MoveToTargetSystem());
+                .Add(new MoveToTargetSystem())
+                .Add(new PingPongMoveSystem());
         }
 
         private void AddFixedSystems()
@@ -98,7 +99,8 @@ namespace EcsLiteTestProject
         private void AddPhysicsEvents()
         {
             _fixedSystems
-                .DelHere<OnTriggerEnterEvent>();
+                .DelHere<OnTriggerEnterEvent>()
+                .DelHere<OnTriggerExitEvent>();
         }
 
         private void OnDestroy()
