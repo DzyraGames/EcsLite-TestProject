@@ -11,6 +11,7 @@ namespace EcsLiteTestProject
 
         private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
         private EcsPool<TargetPositionReachedEvent> _targetPositionReachedEventPool;
+        private EcsPool<TransformComponent> _transformComponentPool; 
 
         private Camera _camera;
 
@@ -18,9 +19,10 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
 
-            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<PlayerComponent>().End();
+            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<PlayerComponent>().Inc<TransformComponent>().End();
             _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
             _targetPositionReachedEventPool = _world.GetPool<TargetPositionReachedEvent>();
+            _transformComponentPool = _world.GetPool<TransformComponent>();
             _camera = Camera.main;
         }
 
@@ -33,7 +35,8 @@ namespace EcsLiteTestProject
                 foreach (int entity in _filter)
                 {
                     ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionPool.Get(entity);
-                    targetPositionMoveComponent.TargetPosition = targetPosition;
+                    TransformComponent transformComponent = _transformComponentPool.Get(entity);
+                    targetPositionMoveComponent.TargetPosition = targetPosition.SetY(transformComponent.Transform.position.y);
                     
                     _targetPositionReachedEventPool.DeleteIfHas(entity);
                 }

@@ -1,61 +1,39 @@
-﻿using System.Xml.Serialization;
-using LeoEcsPhysics;
-using Leopotam.EcsLite;
-using UnityEngine;
+﻿using Leopotam.EcsLite;
+using SevenBoldPencil.EasyEvents;
 
 namespace EcsLiteTestProject
 {
     public class ButtonPressSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsWorld _world;
-        private EcsFilter _onTriggerEnterFilter;
-        private EcsFilter _onTriggerExitFilter;
-        private EcsFilter _buttonFilter;
+        private EventsBus _eventsBus;
         
-        private EcsPool<OnTriggerEnterEvent> _onTriggerEnterEventPool;
-        private EcsPool<OnTriggerExitEvent> _onTriggerExitEventPool; 
-        private EcsPool<ButtonPressedEvent> _buttonPressedEventPool; 
+        private EcsFilter _buttonFilter;
+        private EcsFilter _doorFilter;
+
+        private EcsPool<OpenDoorButtonComponent> _openDoorButtonComponentPool;
+        private EcsPool<DoorComponent> _doorComponentPool; 
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
+            _eventsBus = systems.GetShared<SharedData>().EventsBus;
             
-            _onTriggerEnterFilter = _world.Filter<OnTriggerEnterEvent>().End();
-            _onTriggerExitFilter = _world.Filter<OnTriggerExitEvent>().End();
             _buttonFilter = _world.Filter<OpenDoorButtonComponent>().End();
+            _doorFilter = _world.Filter<DoorComponent>().End();
 
-            _onTriggerEnterEventPool = _world.GetPool<OnTriggerEnterEvent>();
-            _onTriggerExitEventPool = _world.GetPool<OnTriggerExitEvent>();
-            _buttonPressedEventPool = _world.GetPool<ButtonPressedEvent>();
+            _openDoorButtonComponentPool = _world.GetPool<OpenDoorButtonComponent>();
+            _doorComponentPool = _world.GetPool<DoorComponent>();
         }
 
         public void Run(EcsSystems systems)
         {
+            if (!_eventsBus.HasEvents<ButtonPressedEvent>())
+                return;
+            
             foreach (int buttonEntity in _buttonFilter)
             {
-                foreach (int onTriggerEnterEntity in _onTriggerEnterFilter)
-                {
-                    OnTriggerEnterEvent onTriggerEnterEvent = _onTriggerEnterEventPool.Get(onTriggerEnterEntity);
-
-                    if (onTriggerEnterEvent.senderGameObject.CompareTag(Constants.Tags.Button)
-                        && onTriggerEnterEvent.collider.CompareTag(Constants.Tags.Player))
-                    {
-                        _buttonPressedEventPool.AddIfNone(buttonEntity);
-                        Debug.Log("Enter");
-                    }
-                }
-                
-                foreach (int onTriggerExitEntity in _onTriggerExitFilter)
-                {
-                    OnTriggerExitEvent onTriggerExitEvent = _onTriggerExitEventPool.Get(onTriggerExitEntity);
-
-                    if (onTriggerExitEvent.senderGameObject.CompareTag(Constants.Tags.Button)
-                        && onTriggerExitEvent.collider.CompareTag(Constants.Tags.Player))
-                    {
-                        _buttonPressedEventPool.DeleteIfHas(buttonEntity);
-                        Debug.Log("Exit");
-                    }
-                }
+                    
             }
         }
     }

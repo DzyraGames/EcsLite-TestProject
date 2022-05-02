@@ -25,7 +25,7 @@ namespace EcsLiteTestProject
 
         public void Run(EcsSystems systems)
         {
-            _filter = _world.Filter<PlayerComponent>().Inc<TargetPositionMoveComponent>().Inc<SpeedComponent>().Exc<TargetPositionReachedEvent>().End();
+            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<SpeedComponent>().Exc<TargetPositionReachedEvent>().End();
 
             foreach (int entity in _filter)
             {
@@ -34,7 +34,7 @@ namespace EcsLiteTestProject
                 SpeedComponent speedComponent = _speedPool.Get(entity);
 
                 Vector3 currentPosition = transformComponent.Transform.position;
-                Vector3 targetPosition = targetPositionMoveComponent.TargetPosition.SetY(currentPosition.y);
+                Vector3 targetPosition = targetPositionMoveComponent.TargetPosition;
 
                 currentPosition = Vector3.MoveTowards(currentPosition, targetPosition, speedComponent.Speed * Time.deltaTime);
                 transformComponent.Transform.position = currentPosition;

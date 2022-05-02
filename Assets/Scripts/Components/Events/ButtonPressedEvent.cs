@@ -4,6 +4,6 @@ namespace EcsLiteTestProject
 {
     public struct ButtonPressedEvent : IEventReplicant
     {
-        
+        public int Entity;
     }
 }

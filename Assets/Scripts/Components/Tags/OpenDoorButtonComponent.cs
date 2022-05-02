@@ -4,6 +4,6 @@ namespace EcsLiteTestProject
 {
     public struct OpenDoorButtonComponent
     {
-        public ConvertToEntity DoorEntityLink;
+        public MonoEntity DoorEntityLink;
     }
 }

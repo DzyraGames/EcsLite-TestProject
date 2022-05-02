@@ -18,7 +18,7 @@ namespace EcsLiteTestProject
         [SerializeField] private PlayerData _playerData;
 
         #endregion
-        
+
         private EcsWorld _world;
         private EcsSystems _systems;
         private EcsSystems _fixedSystems;
@@ -28,7 +28,7 @@ namespace EcsLiteTestProject
         {
             _world = new EcsWorld();
             InitSharedData();
-            
+
             _systems = new EcsSystems(_world, _sharedData);
             _fixedSystems = new EcsSystems(_world, _sharedData);
             EcsPhysicsEvents.ecsWorld = _world;
@@ -36,10 +36,10 @@ namespace EcsLiteTestProject
             AddInitSystems();
             AddFixedSystems();
             AddPhysicsEvents();
-            
+
             AddSystems();
             AddEvents();
-            
+
             _systems.ConvertScene();
             _systems.Init();
 
@@ -65,13 +65,13 @@ namespace EcsLiteTestProject
                 PlayerData = _playerData
             };
         }
-        
+
         private void AddInitSystems()
         {
             _systems
                 .Add(new PlayerInitSystem());
         }
-        
+
         private void AddSystems()
         {
 #if UNITY_EDITOR
@@ -81,15 +81,16 @@ namespace EcsLiteTestProject
             _systems
                 .Add(new MouseInputSystem())
                 .Add(new MoveToTargetSystem())
-                .Add(new PingPongMoveSystem());
+                .Add(new OpenCloseDoorSystem());
         }
 
         private void AddFixedSystems()
         {
             _fixedSystems
+                .Add(new ButtonCollisionSystem())
                 .Add(new ButtonPressSystem());
         }
-        
+
         private void AddEvents()
         {
             _systems
@@ -112,7 +113,7 @@ namespace EcsLiteTestProject
 
                 _world.Destroy();
                 _world = null;
-                
+
                 _sharedData.EventsBus.Destroy();
                 _sharedData.EventsBus = null;
 
