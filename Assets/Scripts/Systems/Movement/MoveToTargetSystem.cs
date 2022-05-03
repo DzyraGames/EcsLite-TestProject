@@ -25,7 +25,7 @@ namespace EcsLiteTestProject
 
         public void Run(EcsSystems systems)
         {
-            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<SpeedComponent>().Exc<TargetPositionReachedEvent>().End();
+            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionMoveComponent>().Inc<SpeedComponent>().Exc<TargetPositionReachedEvent>().End();
 
             foreach (int entity in _filter)
             {

@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const float MaxRaycastDistance = 100f;
+        public const float DefaultMovementSpeed = 5f;
 
         public static class Tags
         {

@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!23 &52215028 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2540921908528247893, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+  m_PrefabInstance: {fileID: 7038566455660230064}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &60717470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -861,6 +866,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6452933212880437153, guid: 86ad1e53f8b6fbc42b07350111cf7b2d, type: 3}
   m_PrefabInstance: {fileID: 782933770}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &786118775 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2540921908528247893, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+  m_PrefabInstance: {fileID: 970572754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &799963104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,6 +1128,10 @@ PrefabInstance:
       propertyPath: _doorLink
       value: 
       objectReference: {fileID: 268782105}
+    - target: {fileID: 718756903, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+      propertyPath: _meshRenderer
+      value: 
+      objectReference: {fileID: 786118775}
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1125,6 +1139,10 @@ PrefabInstance:
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1158,8 +1176,7 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Button
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 718756898, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
 --- !u!4 &970572755 stripped
 Transform:
@@ -1523,10 +1540,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 799963105}
     m_Modifications:
-    - target: {fileID: 1512991559, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
-      propertyPath: convertMode
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1326478778231770842, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1545,7 +1558,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5404644069705649264, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 2.01
       objectReference: {fileID: 0}
     - target: {fileID: 5404644069705649264, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1579,8 +1592,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1512991559, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
 --- !u!4 &1217427559 stripped
 Transform:
@@ -2079,13 +2091,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976814488}
-  m_LocalRotation: {x: 0.000534113, y: -0.001647853, z: 0.0010259137, w: 0.999998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 120235932}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.061, y: -0.189, z: 0.117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1993635047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,10 +2273,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 799963105}
     m_Modifications:
-    - target: {fileID: 1512991559, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
-      propertyPath: convertMode
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3849279503058693637, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_Name
       value: GreenDoor
@@ -2279,7 +2287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5404644069705649264, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 2.01
       objectReference: {fileID: 0}
     - target: {fileID: 5404644069705649264, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2314,7 +2322,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 1512991559, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: bf5165f47e4fe8c4c8d58852f53067f3, type: 3}
 --- !u!4 &2392073686112667450 stripped
 Transform:
@@ -2463,6 +2471,10 @@ PrefabInstance:
       propertyPath: _doorLink
       value: 
       objectReference: {fileID: 255270897}
+    - target: {fileID: 718756903, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+      propertyPath: _meshRenderer
+      value: 
+      objectReference: {fileID: 52215028}
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -2473,7 +2485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 856651486398478783, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2514,7 +2526,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 718756902, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
     - {fileID: 718756897, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
-    - {fileID: 718756898, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
 --- !u!4 &7038566455660230065 stripped
 Transform:

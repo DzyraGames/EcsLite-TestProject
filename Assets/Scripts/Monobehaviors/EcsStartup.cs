@@ -1,3 +1,4 @@
+using EcsLiteTestProject.Components.Events;
 using EcsLiteTestProject.Data;
 using EcsLiteTestProject.Events;
 using LeoEcsPhysics;
@@ -94,7 +95,8 @@ namespace EcsLiteTestProject
         private void AddEvents()
         {
             _systems
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>());
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>())
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>());
         }
 
         private void AddPhysicsEvents()

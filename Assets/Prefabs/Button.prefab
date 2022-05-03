@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4173085291530946612}
   - component: {fileID: 3133017021551089413}
   - component: {fileID: 5552502670812130221}
-  - component: {fileID: 718756898}
   - component: {fileID: 718756903}
   m_Layer: 0
   m_Name: Button
@@ -98,7 +97,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000059604645, y: 2.5, z: -0.00000008940697}
 --- !u!114 &3133017021551089413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,20 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6d1bbe58a45684bb926eb1bdc2c57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &718756898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4638152801416725127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 236f59dc59fdd4c8a846a7fc5bb735ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  convertMode: 0
-  customWorld: 
 --- !u!114 &718756903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +135,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _doorLink: {fileID: 0}
+  _meshRenderer: {fileID: 0}
