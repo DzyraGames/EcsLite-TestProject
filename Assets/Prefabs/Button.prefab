@@ -135,4 +135,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _doorLink: {fileID: 0}
-  _meshRenderer: {fileID: 0}
+  _meshRenderer: {fileID: 2540921908528247893}
