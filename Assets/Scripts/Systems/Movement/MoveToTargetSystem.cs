@@ -1,5 +1,4 @@
-﻿using EcsLiteTestProject.Events;
-using Leopotam.EcsLite;
+﻿using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace EcsLiteTestProject
@@ -7,46 +6,67 @@ namespace EcsLiteTestProject
     public class MoveToTargetSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsWorld _world;
+        private SharedData _sharedData;
         private EcsFilter _filter;
-        private EcsPool<TransformComponent> _transformPool;
-        private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
-        private EcsPool<SpeedComponent> _speedPool;
-        private EcsPool<DirectionComponent> _directionComponentPool; 
+
+        private EcsPool<TransformComponent> _transformComponentPool;
+        private EcsPool<TargetPositionComponent> _targetPositionComponentPool;
+        private EcsPool<SpeedComponent> _speedComponentPool;
+        private EcsPool<DirectionComponent> _directionComponentComponentPool;
+        private EcsPool<ConstantSpeedComponent> _constantSpeedComponentPool;
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionMoveComponent>().End();
-            _transformPool = _world.GetPool<TransformComponent>();
-            _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
-            _speedPool = _world.GetPool<SpeedComponent>();
-            _directionComponentPool = _world.GetPool<DirectionComponent>();
+            _sharedData = systems.GetShared<SharedData>();
+            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionComponent>().End();
+
+            _transformComponentPool = _world.GetPool<TransformComponent>();
+            _targetPositionComponentPool = _world.GetPool<TargetPositionComponent>();
+            _speedComponentPool = _world.GetPool<SpeedComponent>();
+            _directionComponentComponentPool = _world.GetPool<DirectionComponent>();
+            _constantSpeedComponentPool = _world.GetPool<ConstantSpeedComponent>();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (int entity in _filter)
             {
-                ref TransformComponent transformComponent = ref _transformPool.Get(entity);
-                TargetPositionMoveComponent targetPositionMoveComponent = _targetPositionPool.Get(entity);
-                
-                _speedPool.AddIfNone(entity);
-                ref SpeedComponent speedComponent = ref _speedPool.Get(entity);
+                ref TransformComponent transformComponent = ref _transformComponentPool.Get(entity);
+                TargetPositionComponent targetPositionComponent = _targetPositionComponentPool.Get(entity);
 
                 Vector3 currentPosition = transformComponent.Transform.position;
-                Vector3 targetPosition = targetPositionMoveComponent.TargetPosition;
+                Vector3 targetPosition = targetPositionComponent.TargetPosition;
 
-                currentPosition = Vector3.MoveTowards(currentPosition, targetPosition, speedComponent.Speed * Time.deltaTime);
-                transformComponent.Transform.position = currentPosition;
+                float currentSpeed = GetSpeed(entity);
+                transformComponent.Transform.position =
+                    Vector3.MoveTowards(currentPosition, targetPosition, currentSpeed * Time.deltaTime);
 
                 if (transformComponent.Transform.position == targetPosition)
                 {
-                    _targetPositionPool.Del(entity);
-                    _directionComponentPool.DeleteIfHas(entity);
-
-                    speedComponent.Speed = 0f;
+                    _targetPositionComponentPool.Del(entity);
+                    _directionComponentComponentPool.DeleteIfHas(entity);
+                    
+                    _sharedData.EventsBus.NewEvent<TargetPositionReachedEvent>().Entity = entity;
                 }
             }
+        }
+
+        private float GetSpeed(int entity)
+        {
+            float currentSpeed = Constants.DefaultMovementSpeed;
+            if (_constantSpeedComponentPool.Has(entity))
+            {
+                ConstantSpeedComponent constantSpeedComponent = _constantSpeedComponentPool.Get(entity);
+                currentSpeed = constantSpeedComponent.Speed;
+            }
+            else if (_speedComponentPool.Has(entity))
+            {
+                SpeedComponent speedComponent = _speedComponentPool.Get(entity);
+                currentSpeed = speedComponent.Speed;
+            }
+
+            return currentSpeed;
         }
     }
 }

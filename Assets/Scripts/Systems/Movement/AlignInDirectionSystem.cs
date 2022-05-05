@@ -28,13 +28,11 @@ namespace EcsLiteTestProject
             foreach (int entity in _filter)
             {
                 ref TransformComponent transformComponent = ref _transformComponentPool.Get(entity);
-                ref DirectionComponent directionComponent = ref _directionComponentPool.Get(entity);
+                DirectionComponent directionComponent = _directionComponentPool.Get(entity);
                 RotationSpeedComponent rotationSpeedComponent = _turnSpeedComponentPool.Get(entity);
 
-                Vector3 direction = directionComponent.Direction;
-                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-
                 Quaternion currentRotation = transformComponent.Transform.localRotation;
+                Quaternion targetRotation = Quaternion.LookRotation(directionComponent.Direction, Vector3.up);
                 transformComponent.Transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation,
                     rotationSpeedComponent.Speed * Time.deltaTime);
             }

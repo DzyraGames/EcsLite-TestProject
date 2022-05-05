@@ -1,13 +1,10 @@
-using EcsLiteTestProject.Components.Events;
 using EcsLiteTestProject.Data;
-using EcsLiteTestProject.Events;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
 using SevenBoldPencil.EasyEvents;
 using UnityEngine;
 using Voody.UniLeo.Lite;
-using Debug = System.Diagnostics.Debug;
 
 namespace EcsLiteTestProject
 {
@@ -83,9 +80,9 @@ namespace EcsLiteTestProject
             _systems
                 .Add(new MouseInputSystem())
                 .Add(new CharacterAnimationSpeedSystem())
-                .Add(new SpeedAccelerationSystem())
                 .Add(new MoveToTargetSystem())
-                .Add(new OpenCloseDoorSystem())
+                .Add(new SpeedAccelerationSystem())
+                .Add(new OpenDoorSystem())
                 .Add(new AlignInDirectionSystem())
                 .Add(new CharacterAnimationSpeedSystem());
         }
@@ -101,7 +98,9 @@ namespace EcsLiteTestProject
         {
             _systems
                 .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>())
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>());
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>())
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<TargetPositionReachedEvent>())
+                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<DoorOpenedEvent>());
         }
 
         private void AddPhysicsEvents()

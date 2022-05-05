@@ -1,5 +1,4 @@
-﻿using EcsLiteTestProject.Events;
-using Leopotam.EcsLite;
+﻿using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace EcsLiteTestProject
@@ -9,7 +8,7 @@ namespace EcsLiteTestProject
         private EcsWorld _world;
         private EcsFilter _filter;
 
-        private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
+        private EcsPool<TargetPositionComponent> _targetPositionComponentPool;
         private EcsPool<DirectionComponent> _directionComponentPool; 
         private EcsPool<TransformComponent> _transformComponentPool;
 
@@ -20,7 +19,7 @@ namespace EcsLiteTestProject
             _world = systems.GetWorld();
 
             _filter = _world.Filter<PlayerComponent>().Inc<TransformComponent>().End();
-            _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
+            _targetPositionComponentPool = _world.GetPool<TargetPositionComponent>();
             _directionComponentPool = _world.GetPool<DirectionComponent>();
             _transformComponentPool = _world.GetPool<TransformComponent>();
             _camera = Camera.main;
@@ -28,25 +27,24 @@ namespace EcsLiteTestProject
 
         public void Run(EcsSystems systems)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (!Input.GetMouseButtonDown(0)) 
+                return;
+            
+            Vector3 targetPosition = GetTargetPosition();
+            
+            foreach (int entity in _filter)
             {
-                Vector3 targetPosition = GetTargetPosition();
+                _targetPositionComponentPool.AddIfNone(entity);
+                _directionComponentPool.AddIfNone(entity);
 
-                foreach (int entity in _filter)
-                {
-                    _targetPositionPool.AddIfNone(entity);
-                    _directionComponentPool.AddIfNone(entity);
-                    
-                    ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionPool.Get(entity);
-                    TransformComponent transformComponent = _transformComponentPool.Get(entity);
-                    var currentPosition = transformComponent.Transform.position;
+                TransformComponent transformComponent = _transformComponentPool.Get(entity);
+                ref TargetPositionComponent targetPositionComponent = ref _targetPositionComponentPool.Get(entity);
+                ref DirectionComponent directionComponent = ref _directionComponentPool.Get(entity);
 
-                    Vector3 correctTargetPosition = targetPosition.SetY(currentPosition.y);
-                    targetPositionMoveComponent.TargetPosition = correctTargetPosition;
-
-                    ref DirectionComponent directionComponent = ref _directionComponentPool.Get(entity);
-                    directionComponent.Direction = (correctTargetPosition - currentPosition).normalized;
-                }
+                Vector3 currentPosition = transformComponent.Transform.position;
+                Vector3 ignoreYTargetPosition = targetPosition.SetY(currentPosition.y);
+                targetPositionComponent.TargetPosition = ignoreYTargetPosition;
+                directionComponent.Direction = (ignoreYTargetPosition - currentPosition).normalized;
             }
         }
 

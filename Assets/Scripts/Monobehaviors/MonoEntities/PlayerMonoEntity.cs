@@ -1,5 +1,4 @@
 ﻿using EcsLiteTestProject.Data;
-using EcsLiteTestProject.Events;
 using Leopotam.EcsLite;
 using UnityEngine;
 

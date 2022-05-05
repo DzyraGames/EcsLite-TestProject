@@ -1,7 +1,9 @@
-﻿namespace EcsLiteTestProject.Events
+﻿using SevenBoldPencil.EasyEvents;
+
+namespace EcsLiteTestProject
 {
-    public struct DoorOpenedEvent
+    public struct DoorOpenedEvent : IEventReplicant
     {
-        
+        public int Entity;
     }
 }

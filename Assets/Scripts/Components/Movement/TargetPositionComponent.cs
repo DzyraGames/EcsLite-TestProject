@@ -2,7 +2,7 @@
 
 namespace EcsLiteTestProject
 {
-    public struct TargetPositionMoveComponent
+    public struct TargetPositionComponent
     {
         public Vector3 TargetPosition;
     }

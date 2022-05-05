@@ -1,7 +1,5 @@
-﻿using EcsLiteTestProject.Components.Events;
-using LeoEcsPhysics;
+﻿using LeoEcsPhysics;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace EcsLiteTestProject
 {
@@ -9,8 +7,10 @@ namespace EcsLiteTestProject
     {
         private EcsWorld _world;
         private SharedData _sharedData;
+        
         private EcsFilter _onTriggerEnterFilter;
         private EcsFilter _onTriggerExitFilter;
+        
         private EcsPool<OnTriggerEnterEvent> _onTriggerEnterEventPool;
         private EcsPool<OnTriggerExitEvent> _onTriggerExitEventPool;
 
@@ -32,7 +32,7 @@ namespace EcsLiteTestProject
             {
                 OnTriggerEnterEvent onTriggerEnterEvent = _onTriggerEnterEventPool.Get(entity);
 
-                if (onTriggerEnterEvent.senderGameObject.TryGetComponent(out  MonoEntity openDoorButtonLink) &&
+                if (onTriggerEnterEvent.senderGameObject.TryGetComponent(out  OpenDoorButtonMonoEntity openDoorButtonLink) &&
                     onTriggerEnterEvent.collider.CompareTag(Constants.Tags.Player))
                 {
                     if (openDoorButtonLink.TryGetEntity(out int buttonEntity))
@@ -46,7 +46,7 @@ namespace EcsLiteTestProject
             {
                 OnTriggerExitEvent onTriggerExitEvent = _onTriggerExitEventPool.Get(entity);
 
-                if (onTriggerExitEvent.senderGameObject.TryGetComponent(out MonoEntity openDoorButtonLink) &&
+                if (onTriggerExitEvent.senderGameObject.TryGetComponent(out OpenDoorButtonMonoEntity openDoorButtonLink) &&
                     onTriggerExitEvent.collider.CompareTag(Constants.Tags.Player))
                 {
                     if (openDoorButtonLink.TryGetEntity(out int buttonEntity))

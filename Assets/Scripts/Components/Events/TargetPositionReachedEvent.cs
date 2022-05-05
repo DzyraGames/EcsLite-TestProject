@@ -1,7 +1,9 @@
-﻿namespace EcsLiteTestProject
+﻿using SevenBoldPencil.EasyEvents;
+
+namespace EcsLiteTestProject
 {
-    public struct TargetPositionReachedEvent
+    public struct TargetPositionReachedEvent : IEventReplicant
     {
-        
+        public int Entity;
     }
 }
