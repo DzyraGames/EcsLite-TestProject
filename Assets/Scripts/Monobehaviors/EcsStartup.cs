@@ -72,8 +72,6 @@ namespace EcsLiteTestProject
 
         private void AddInitSystems()
         {
-            _systems
-                .Add(new PlayerInitSystem());
         }
 
         private void AddSystems()
