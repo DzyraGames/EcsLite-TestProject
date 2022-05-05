@@ -1,6 +1,6 @@
 ﻿namespace EcsLiteTestProject
 {
-    public struct SpeedComponent
+    public struct ConstantMoveSpeedComponent
     {
         public float Speed;
     }

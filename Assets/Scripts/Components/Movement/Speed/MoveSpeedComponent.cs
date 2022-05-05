@@ -1,6 +1,6 @@
 ﻿namespace EcsLiteTestProject
 {
-    public struct RotationSpeedComponent
+    public struct MoveSpeedComponent
     {
         public float Speed;
     }

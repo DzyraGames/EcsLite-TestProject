@@ -10,19 +10,18 @@ namespace EcsLiteTestProject
         private EventsBus _eventsBus;
         private EcsFilter _filter;
 
-        private EcsPool<TargetSpeedComponent> _targetSpeedComponentPool;
-        private EcsPool<SpeedComponent> _speedComponentPool;
+        private EcsPool<TargetMoveSpeedComponent> _targetSpeedComponentPool;
+        private EcsPool<MoveSpeedComponent> _speedComponentPool;
         private EcsPool<AccelerationComponent> _accelerationComponentPool;
-        private EcsFilter _targetPositionFiler;
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
             _eventsBus = systems.GetShared<SharedData>().EventsBus;
-            _filter = _world.Filter<TargetSpeedComponent>().Inc<AccelerationComponent>().Inc<TargetPositionComponent>().End();
+            _filter = _world.Filter<TargetMoveSpeedComponent>().Inc<AccelerationComponent>().Inc<TargetPositionMoveComponent>().End();
 
-            _targetSpeedComponentPool = _world.GetPool<TargetSpeedComponent>();
-            _speedComponentPool = _world.GetPool<SpeedComponent>();
+            _targetSpeedComponentPool = _world.GetPool<TargetMoveSpeedComponent>();
+            _speedComponentPool = _world.GetPool<MoveSpeedComponent>();
             _accelerationComponentPool = _world.GetPool<AccelerationComponent>();
         }
 
@@ -32,13 +31,13 @@ namespace EcsLiteTestProject
             
             foreach (int entity in _filter)
             {
-                TargetSpeedComponent targetSpeedComponent = _targetSpeedComponentPool.Get(entity);
+                TargetMoveSpeedComponent targetMoveSpeedComponent = _targetSpeedComponentPool.Get(entity);
                 AccelerationComponent accelerationComponent = _accelerationComponentPool.Get(entity);
 
                 _speedComponentPool.AddIfNone(entity);
-                ref SpeedComponent speedComponent = ref _speedComponentPool.Get(entity);
+                ref MoveSpeedComponent moveSpeedComponent = ref _speedComponentPool.Get(entity);
 
-                speedComponent.Speed = Mathf.Lerp(speedComponent.Speed, targetSpeedComponent.TargetSpeed,
+                moveSpeedComponent.Speed = Mathf.Lerp(moveSpeedComponent.Speed, targetMoveSpeedComponent.TargetSpeed,
                     accelerationComponent.Acceleration * Time.deltaTime);
             }
         }
@@ -53,8 +52,8 @@ namespace EcsLiteTestProject
 
                 if (_speedComponentPool.Has(entity))
                 {
-                    ref SpeedComponent speedComponent = ref _speedComponentPool.Get(entity);
-                    speedComponent.Speed = 0f;
+                    ref MoveSpeedComponent moveSpeedComponent = ref _speedComponentPool.Get(entity);
+                    moveSpeedComponent.Speed = 0f;
                 }
             }
         }

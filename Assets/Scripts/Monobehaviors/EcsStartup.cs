@@ -1,10 +1,13 @@
 using EcsLiteTestProject.Data;
+using EcsLiteTestProject.Fabrics;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
+using Leopotam.EcsLite.UnityEditor;
 using SevenBoldPencil.EasyEvents;
 using UnityEngine;
 using Voody.UniLeo.Lite;
+using Zenject;
 
 namespace EcsLiteTestProject
 {
@@ -12,9 +15,6 @@ namespace EcsLiteTestProject
     {
         #region SharedData
 
-        [SerializeField] private Transform _playerTransform;
-        [SerializeField] private Animator _playerAnimator;
-        
         [SerializeField] private PlayerData _playerData;
 
         #endregion
@@ -22,7 +22,15 @@ namespace EcsLiteTestProject
         private EcsWorld _world;
         private EcsSystems _systems;
         private EcsSystems _fixedSystems;
+
         private SharedData _sharedData;
+        private EcsSystemFactory _systemFactory;
+
+        [Inject]
+        public void Construct(EcsSystemFactory systemFactory)
+        {
+            _systemFactory = systemFactory;
+        }
 
         private void Start()
         {
@@ -33,7 +41,6 @@ namespace EcsLiteTestProject
             _fixedSystems = new EcsSystems(_world, _sharedData);
             EcsPhysicsEvents.ecsWorld = _world;
 
-            AddInitSystems();
             AddFixedSystems();
             AddPhysicsEvents();
 
@@ -56,60 +63,6 @@ namespace EcsLiteTestProject
             _systems?.Run();
         }
 
-        private void InitSharedData()
-        {
-            _sharedData = new SharedData
-            {
-                EventsBus = new EventsBus(),
-                PlayerTransform = _playerTransform,
-                PlayerAnimator =  _playerAnimator,
-                PlayerData = _playerData
-            };
-        }
-
-        private void AddInitSystems()
-        {
-        }
-
-        private void AddSystems()
-        {
-#if UNITY_EDITOR
-            _systems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem());
-#endif
-
-            _systems
-                .Add(new MouseInputSystem())
-                .Add(new CharacterAnimationSpeedSystem())
-                .Add(new MoveToTargetSystem())
-                .Add(new SpeedAccelerationSystem())
-                .Add(new OpenDoorSystem())
-                .Add(new AlignInDirectionSystem())
-                .Add(new CharacterAnimationSpeedSystem());
-        }
-
-        private void AddFixedSystems()
-        {
-            _fixedSystems
-                .Add(new ButtonCollisionSystem())
-                .Add(new ButtonPressSystem());
-        }
-
-        private void AddEvents()
-        {
-            _systems
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>())
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>())
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<TargetPositionReachedEvent>())
-                .Add(_sharedData.EventsBus.GetDestroyEventsSystem().IncReplicant<DoorOpenedEvent>());
-        }
-
-        private void AddPhysicsEvents()
-        {
-            _fixedSystems
-                .DelHere<OnTriggerEnterEvent>()
-                .DelHere<OnTriggerExitEvent>();
-        }
-
         private void OnDestroy()
         {
             if (_systems != null)
@@ -125,6 +78,88 @@ namespace EcsLiteTestProject
 
                 EcsPhysicsEvents.ecsWorld = null;
             }
+        }
+
+        private void InitSharedData()
+        {
+            _sharedData = new SharedData
+            {
+                EventsBus = new EventsBus(),
+                PlayerData = _playerData
+            };
+        }
+
+        private void AddFixedSystems()
+        {
+            AddFixedSystem<ButtonCollisionSystem>();
+        }
+
+        private void AddPhysicsEvents()
+        {
+            _fixedSystems.DelHere<OnTriggerEnterEvent>();
+            _fixedSystems.DelHere<OnTriggerExitEvent>();
+        }
+
+        private void AddSystems()
+        {
+            AddDebugSystems();
+            AddInputSystems();
+            AddMovementSystems();
+            AddDoorMechanicsSystems();
+            AddAnimationSystems();
+        }
+
+        #region Systems
+
+        private void AddDebugSystems()
+        {
+#if UNITY_EDITOR
+            AddSystem<EcsWorldDebugSystem>();
+#endif
+        }
+
+        private void AddInputSystems()
+        {
+            AddSystem<MouseInputSystem>();
+        }
+
+        private void AddMovementSystems()
+        {
+            AddSystem<MoveToTargetSystem>();
+            AddSystem<AlignInDirectionSystem>();
+            AddSystem<SpeedAccelerationSystem>();
+        }
+
+        private void AddAnimationSystems()
+        {
+            AddSystem<CharacterAnimationSpeedSystem>();
+        }
+        
+        private void AddDoorMechanicsSystems()
+        {
+            AddSystem<ButtonPressSystem>();
+            AddSystem<OpenDoorSystem>();
+        }
+
+        #endregion
+
+        private void AddEvents()
+        {
+            EventsBus eventsBus = _sharedData.EventsBus;
+            _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<ButtonPressedEvent>());
+            _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>());
+            _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<TargetPositionReachedEvent>());
+            _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<DoorOpenedEvent>());
+        }
+
+        private void AddSystem<TSystem>() where TSystem : IEcsSystem
+        {
+            _systems.Add(_systemFactory.Create<TSystem>());
+        }
+
+        private void AddFixedSystem<Tsystem>() where Tsystem : IEcsSystem
+        {
+            _systems.Add(_systemFactory.Create<Tsystem>());
         }
     }
 }

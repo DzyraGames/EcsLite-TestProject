@@ -1,6 +1,5 @@
 ﻿using Leopotam.EcsLite;
 using SevenBoldPencil.EasyEvents;
-using UnityEngine;
 
 namespace EcsLiteTestProject
 {
@@ -10,7 +9,7 @@ namespace EcsLiteTestProject
         private EventsBus _eventsBus;
         private EcsFilter _filter;
 
-        private EcsPool<TargetPositionComponent> _targetPositionMoveComponentPool;
+        private EcsPool<TargetPositionMoveComponent> _targetPositionMoveComponentPool;
         private EcsPool<PingPongMoveComponent> _pingPongMoveComponentPool;
         private EcsPool<OpenDoorButtonComponent> _openDoorButtonComponentPool;
 
@@ -20,7 +19,7 @@ namespace EcsLiteTestProject
             _eventsBus = systems.GetShared<SharedData>().EventsBus;
             _filter = _world.Filter<DoorComponent>().Inc<PingPongMoveComponent>().End();
 
-            _targetPositionMoveComponentPool = _world.GetPool<TargetPositionComponent>();
+            _targetPositionMoveComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _pingPongMoveComponentPool = _world.GetPool<PingPongMoveComponent>();
             _openDoorButtonComponentPool = _world.GetPool<OpenDoorButtonComponent>();
         }
@@ -35,10 +34,10 @@ namespace EcsLiteTestProject
                 if (doorEntityLink.TryGetEntity(out int entity))
                 {
                     _targetPositionMoveComponentPool.AddIfNone(entity);
-                    ref TargetPositionComponent targetPositionComponent = ref _targetPositionMoveComponentPool.Get(entity);
+                    ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionMoveComponentPool.Get(entity);
                     ref PingPongMoveComponent pingPongMoveComponent = ref _pingPongMoveComponentPool.Get(entity);
 
-                    targetPositionComponent.TargetPosition = pingPongMoveComponent.EndPosition;
+                    targetPositionMoveComponent.TargetPosition = pingPongMoveComponent.EndPosition;
                 }
             }
 

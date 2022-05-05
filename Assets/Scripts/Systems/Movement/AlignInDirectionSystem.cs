@@ -34,7 +34,7 @@ namespace EcsLiteTestProject
                 Quaternion currentRotation = transformComponent.Transform.localRotation;
                 Quaternion targetRotation = Quaternion.LookRotation(directionComponent.Direction, Vector3.up);
                 transformComponent.Transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation,
-                    rotationSpeedComponent.Speed * Time.deltaTime);
+                    rotationSpeedComponent.RotationSpeed * Time.deltaTime);
             }
         }
     }

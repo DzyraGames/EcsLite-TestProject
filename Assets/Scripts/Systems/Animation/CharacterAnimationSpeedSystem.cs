@@ -8,17 +8,17 @@ namespace EcsLiteTestProject
         private EcsFilter _filter;
 
         private EcsPool<AnimatorComponent> _animatorComponentPool;
-        private EcsPool<SpeedComponent> _speedComponentPool;
-        private EcsPool<TargetSpeedComponent> _targetSpeedComponentPool; 
+        private EcsPool<MoveSpeedComponent> _speedComponentPool;
+        private EcsPool<TargetMoveSpeedComponent> _targetSpeedComponentPool; 
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<AnimatorComponent>().Inc<SpeedComponent>().Inc<TargetSpeedComponent>().End();
+            _filter = _world.Filter<AnimatorComponent>().Inc<MoveSpeedComponent>().Inc<TargetMoveSpeedComponent>().End();
 
             _animatorComponentPool = _world.GetPool<AnimatorComponent>();
-            _speedComponentPool = _world.GetPool<SpeedComponent>();
-            _targetSpeedComponentPool = _world.GetPool<TargetSpeedComponent>();
+            _speedComponentPool = _world.GetPool<MoveSpeedComponent>();
+            _targetSpeedComponentPool = _world.GetPool<TargetMoveSpeedComponent>();
         }
 
         public void Run(EcsSystems systems)
@@ -26,10 +26,10 @@ namespace EcsLiteTestProject
             foreach (int entity in _filter)
             {
                 ref AnimatorComponent animatorComponent = ref _animatorComponentPool.Get(entity);
-                SpeedComponent speedComponent = _speedComponentPool.Get(entity);
-                TargetSpeedComponent targetSpeedComponent = _targetSpeedComponentPool.Get(entity);
+                MoveSpeedComponent moveSpeedComponent = _speedComponentPool.Get(entity);
+                TargetMoveSpeedComponent targetMoveSpeedComponent = _targetSpeedComponentPool.Get(entity);
 
-                float normalizedSpeed = speedComponent.Speed / targetSpeedComponent.TargetSpeed;
+                float normalizedSpeed = moveSpeedComponent.Speed / targetMoveSpeedComponent.TargetSpeed;
                 animatorComponent.Animator.SetFloat(Constants.AnimatorHashes.SpeedHash, normalizedSpeed);
             }
         }

@@ -1,28 +1,30 @@
 ﻿using Leopotam.EcsLite;
 using UnityEngine;
+using Zenject;
 
 namespace EcsLiteTestProject
 {
-    public class MouseInputSystem : IInputSystem
+    public class MouseInputSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsWorld _world;
         private EcsFilter _filter;
 
-        private EcsPool<TargetPositionComponent> _targetPositionComponentPool;
+        private EcsPool<TargetPositionMoveComponent> _targetPositionComponentPool;
         private EcsPool<DirectionComponent> _directionComponentPool; 
         private EcsPool<TransformComponent> _transformComponentPool;
 
-        private Camera _camera;
-
+        [Inject] private Camera _camera;
+        [Inject] private SharedData _sharedData;
+        
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
 
             _filter = _world.Filter<PlayerComponent>().Inc<TransformComponent>().End();
-            _targetPositionComponentPool = _world.GetPool<TargetPositionComponent>();
+            _targetPositionComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _directionComponentPool = _world.GetPool<DirectionComponent>();
             _transformComponentPool = _world.GetPool<TransformComponent>();
-            _camera = Camera.main;
+            var data = _sharedData;
         }
 
         public void Run(EcsSystems systems)
@@ -38,12 +40,12 @@ namespace EcsLiteTestProject
                 _directionComponentPool.AddIfNone(entity);
 
                 TransformComponent transformComponent = _transformComponentPool.Get(entity);
-                ref TargetPositionComponent targetPositionComponent = ref _targetPositionComponentPool.Get(entity);
+                ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionComponentPool.Get(entity);
                 ref DirectionComponent directionComponent = ref _directionComponentPool.Get(entity);
 
                 Vector3 currentPosition = transformComponent.Transform.position;
                 Vector3 ignoreYTargetPosition = targetPosition.SetY(currentPosition.y);
-                targetPositionComponent.TargetPosition = ignoreYTargetPosition;
+                targetPositionMoveComponent.TargetPosition = ignoreYTargetPosition;
                 directionComponent.Direction = (ignoreYTargetPosition - currentPosition).normalized;
             }
         }

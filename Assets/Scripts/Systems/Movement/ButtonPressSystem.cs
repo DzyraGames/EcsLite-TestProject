@@ -9,7 +9,7 @@ namespace EcsLiteTestProject
         private EcsWorld _world;
         private EventsBus _eventsBus;
 
-        private EcsPool<TargetPositionComponent> _targetPositionMoveComponentPool;
+        private EcsPool<TargetPositionMoveComponent> _targetPositionMoveComponentPool;
         private EcsPool<PingPongMoveComponent> _pingPongMoveComponentPool;
 
         public void Init(EcsSystems systems)
@@ -17,7 +17,7 @@ namespace EcsLiteTestProject
             _world = systems.GetWorld();
             _eventsBus = systems.GetShared<SharedData>().EventsBus;
 
-            _targetPositionMoveComponentPool = _world.GetPool<TargetPositionComponent>();
+            _targetPositionMoveComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _pingPongMoveComponentPool = _world.GetPool<PingPongMoveComponent>();
         }
 
@@ -45,8 +45,8 @@ namespace EcsLiteTestProject
         private void AddTargetPositionComponent(int entity, Vector3 targetPosition)
         {
             _targetPositionMoveComponentPool.AddIfNone(entity);
-            ref TargetPositionComponent targetPositionComponent = ref _targetPositionMoveComponentPool.Get(entity);
-            targetPositionComponent.TargetPosition = targetPosition;
+            ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionMoveComponentPool.Get(entity);
+            targetPositionMoveComponent.TargetPosition = targetPosition;
         }
     }
 }
