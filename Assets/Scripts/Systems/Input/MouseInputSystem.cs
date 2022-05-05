@@ -10,8 +10,8 @@ namespace EcsLiteTestProject
         private EcsFilter _filter;
 
         private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
-        private EcsPool<TargetPositionReachedEvent> _targetPositionReachedEventPool;
-        private EcsPool<TransformComponent> _transformComponentPool; 
+        private EcsPool<DirectionComponent> _directionComponentPool; 
+        private EcsPool<TransformComponent> _transformComponentPool;
 
         private Camera _camera;
 
@@ -19,9 +19,9 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
 
-            _filter = _world.Filter<TargetPositionMoveComponent>().Inc<PlayerComponent>().Inc<TransformComponent>().End();
+            _filter = _world.Filter<PlayerComponent>().Inc<TransformComponent>().End();
             _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
-            _targetPositionReachedEventPool = _world.GetPool<TargetPositionReachedEvent>();
+            _directionComponentPool = _world.GetPool<DirectionComponent>();
             _transformComponentPool = _world.GetPool<TransformComponent>();
             _camera = Camera.main;
         }
@@ -34,11 +34,18 @@ namespace EcsLiteTestProject
 
                 foreach (int entity in _filter)
                 {
+                    _targetPositionPool.AddIfNone(entity);
+                    _directionComponentPool.AddIfNone(entity);
+                    
                     ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionPool.Get(entity);
                     TransformComponent transformComponent = _transformComponentPool.Get(entity);
-                    targetPositionMoveComponent.TargetPosition = targetPosition.SetY(transformComponent.Transform.position.y);
-                    
-                    _targetPositionReachedEventPool.DeleteIfHas(entity);
+                    var currentPosition = transformComponent.Transform.position;
+
+                    Vector3 correctTargetPosition = targetPosition.SetY(currentPosition.y);
+                    targetPositionMoveComponent.TargetPosition = correctTargetPosition;
+
+                    ref DirectionComponent directionComponent = ref _directionComponentPool.Get(entity);
+                    directionComponent.Direction = (correctTargetPosition - currentPosition).normalized;
                 }
             }
         }

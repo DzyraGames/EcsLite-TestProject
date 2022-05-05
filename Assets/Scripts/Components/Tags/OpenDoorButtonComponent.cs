@@ -1,6 +1,4 @@
-﻿using Voody.UniLeo.Lite;
-
-namespace EcsLiteTestProject
+﻿namespace EcsLiteTestProject
 {
     public struct OpenDoorButtonComponent
     {

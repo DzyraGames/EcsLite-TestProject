@@ -6,5 +6,7 @@ namespace EcsLiteTestProject.Data
     public class PlayerData : ScriptableObject
     {
         public float MoveSpeed;
+        public float Acceleration;
+        public float TurnSpeed;
     }
 }

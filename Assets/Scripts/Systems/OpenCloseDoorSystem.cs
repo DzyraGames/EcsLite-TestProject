@@ -1,4 +1,5 @@
-﻿using EcsLiteTestProject.Events;
+﻿using EcsLiteTestProject.Components.Events;
+using EcsLiteTestProject.Events;
 using Leopotam.EcsLite;
 using SevenBoldPencil.EasyEvents;
 
@@ -19,7 +20,7 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
             _eventsBus = systems.GetShared<SharedData>().EventsBus;
-            _filter = _world.Filter<DoorComponent>().Inc<TargetPositionMoveComponent>().Inc<PingPongMoveComponent>()
+            _filter = _world.Filter<DoorComponent>().Inc<PingPongMoveComponent>()
                 .Exc<DoorOpenedEvent>().End();
 
             _targetPositionMoveComponentPool = _world.GetPool<TargetPositionMoveComponent>();
@@ -37,15 +38,32 @@ namespace EcsLiteTestProject
 
                 foreach (int doorEntity in _filter)
                 {
-                    if (doorEntity != doorLink) 
+                    if (doorEntity != doorLink)
                         continue;
-                    
-                    ref TargetPositionMoveComponent targetPositionMoveComponent =
-                        ref _targetPositionMoveComponentPool.Get(doorEntity);
+
                     ref PingPongMoveComponent pingPongMoveComponent = ref _pingPongMoveComponentPool.Get(doorEntity);
 
+                    _targetPositionMoveComponentPool.AddIfNone(doorEntity);
+
+                    ref TargetPositionMoveComponent targetPositionMoveComponent =
+                        ref _targetPositionMoveComponentPool.Get(doorEntity);
+                    
                     targetPositionMoveComponent.TargetPosition = pingPongMoveComponent.EndPosition;
                     _targetPositionReachedEventPool.DeleteIfHas(doorEntity);
+                }
+            }
+
+            foreach (int eventBody in _eventsBus.GetEventBodies<ButtonUnpressedEvent>(out var buttonUnpressedEventPool))
+            {
+                ref ButtonUnpressedEvent buttonPressedEvent = ref buttonUnpressedEventPool.Get(eventBody);
+                _openDoorButtonComponentPool.Get(buttonPressedEvent.Entity).DoorEntityLink.TryGetEntity(out int doorLink);
+
+                foreach (int doorEntity in _filter)
+                {
+                    if (doorEntity != doorLink)
+                        continue;
+
+                    _targetPositionMoveComponentPool.DeleteIfHas(doorEntity);
                 }
             }
         }

@@ -11,27 +11,27 @@ namespace EcsLiteTestProject
         private EcsPool<TransformComponent> _transformPool;
         private EcsPool<TargetPositionMoveComponent> _targetPositionPool;
         private EcsPool<SpeedComponent> _speedPool;
-        private EcsPool<TargetPositionReachedEvent> _targetPositionReachedEventPool; 
+        private EcsPool<DirectionComponent> _directionComponentPool; 
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
-
+            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionMoveComponent>().End();
             _transformPool = _world.GetPool<TransformComponent>();
             _targetPositionPool = _world.GetPool<TargetPositionMoveComponent>();
-            _targetPositionReachedEventPool = _world.GetPool<TargetPositionReachedEvent>();
             _speedPool = _world.GetPool<SpeedComponent>();
+            _directionComponentPool = _world.GetPool<DirectionComponent>();
         }
 
         public void Run(EcsSystems systems)
         {
-            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionMoveComponent>().Inc<SpeedComponent>().Exc<TargetPositionReachedEvent>().End();
-
             foreach (int entity in _filter)
             {
                 ref TransformComponent transformComponent = ref _transformPool.Get(entity);
                 TargetPositionMoveComponent targetPositionMoveComponent = _targetPositionPool.Get(entity);
-                SpeedComponent speedComponent = _speedPool.Get(entity);
+                
+                _speedPool.AddIfNone(entity);
+                ref SpeedComponent speedComponent = ref _speedPool.Get(entity);
 
                 Vector3 currentPosition = transformComponent.Transform.position;
                 Vector3 targetPosition = targetPositionMoveComponent.TargetPosition;
@@ -41,7 +41,10 @@ namespace EcsLiteTestProject
 
                 if (transformComponent.Transform.position == targetPosition)
                 {
-                    _targetPositionReachedEventPool.AddIfNone(entity);
+                    _targetPositionPool.Del(entity);
+                    _directionComponentPool.DeleteIfHas(entity);
+
+                    speedComponent.Speed = 0f;
                 }
             }
         }

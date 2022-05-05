@@ -9,6 +9,7 @@ namespace EcsLiteTestProject
         public EventsBus EventsBus;
         
         public Transform PlayerTransform;
+        public Animator PlayerAnimator;
         public PlayerData PlayerData;
     }
 }

@@ -16,6 +16,8 @@ namespace EcsLiteTestProject
         #region SharedData
 
         [SerializeField] private Transform _playerTransform;
+        [SerializeField] private Animator _playerAnimator;
+        
         [SerializeField] private PlayerData _playerData;
 
         #endregion
@@ -63,6 +65,7 @@ namespace EcsLiteTestProject
             {
                 EventsBus = new EventsBus(),
                 PlayerTransform = _playerTransform,
+                PlayerAnimator =  _playerAnimator,
                 PlayerData = _playerData
             };
         }
@@ -81,8 +84,12 @@ namespace EcsLiteTestProject
 
             _systems
                 .Add(new MouseInputSystem())
+                .Add(new CharacterAnimationSpeedSystem())
+                .Add(new SpeedAccelerationSystem())
                 .Add(new MoveToTargetSystem())
-                .Add(new OpenCloseDoorSystem());
+                .Add(new OpenCloseDoorSystem())
+                .Add(new AlignInDirectionSystem())
+                .Add(new CharacterAnimationSpeedSystem());
         }
 
         private void AddFixedSystems()
