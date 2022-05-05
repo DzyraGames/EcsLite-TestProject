@@ -6,16 +6,15 @@ namespace EcsLiteTestProject
 {
     public class MouseInputSystem : IEcsInitSystem, IEcsRunSystem
     {
+        [Inject] private Camera _camera;
+        
         private EcsWorld _world;
         private EcsFilter _filter;
 
         private EcsPool<TargetPositionMoveComponent> _targetPositionComponentPool;
-        private EcsPool<DirectionComponent> _directionComponentPool; 
+        private EcsPool<DirectionComponent> _directionComponentPool;
         private EcsPool<TransformComponent> _transformComponentPool;
 
-        [Inject] private Camera _camera;
-        [Inject] private SharedData _sharedData;
-        
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
@@ -24,7 +23,6 @@ namespace EcsLiteTestProject
             _targetPositionComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _directionComponentPool = _world.GetPool<DirectionComponent>();
             _transformComponentPool = _world.GetPool<TransformComponent>();
-            var data = _sharedData;
         }
 
         public void Run(EcsSystems systems)

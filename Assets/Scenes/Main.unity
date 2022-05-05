@@ -425,7 +425,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 440711834}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -469,6 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 769a5e885892435e90f2ce44cb761ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 1336359340}
 --- !u!1001 &447769179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2061,8 +2063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a866287c5f1e248aaff41218e681c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 2015860133}
-  _playerAnimator: {fileID: 2015264292}
   _playerData: {fileID: 11400000, guid: 484cba0a3531e644eb9c0b4ec7b193b6, type: 2}
 --- !u!4 &1733443909
 Transform:
