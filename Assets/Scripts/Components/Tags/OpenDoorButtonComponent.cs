@@ -1,7 +1,11 @@
-﻿namespace EcsLiteTestProject
+﻿using System;
+using Voody.UniLeo.Lite;
+
+namespace EcsLiteTestProject
 {
+    [Serializable]
     public struct OpenDoorButtonComponent
     {
-        public MonoEntity DoorEntityLink;
+        public ConvertToEntity DoorEntityLink;
     }
 }

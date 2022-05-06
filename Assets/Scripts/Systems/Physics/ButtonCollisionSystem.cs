@@ -1,5 +1,6 @@
 ﻿using LeoEcsPhysics;
 using Leopotam.EcsLite;
+using Voody.UniLeo.Lite;
 
 namespace EcsLiteTestProject
 {
@@ -32,7 +33,7 @@ namespace EcsLiteTestProject
             {
                 OnTriggerEnterEvent onTriggerEnterEvent = _onTriggerEnterEventPool.Get(entity);
 
-                if (onTriggerEnterEvent.senderGameObject.TryGetComponent(out  OpenDoorButtonMonoEntity openDoorButtonLink) &&
+                if (onTriggerEnterEvent.senderGameObject.TryGetComponent(out  ConvertToEntity openDoorButtonLink) &&
                     onTriggerEnterEvent.collider.CompareTag(Constants.Tags.Player))
                 {
                     if (openDoorButtonLink.TryGetEntity(out int buttonEntity))
@@ -46,7 +47,7 @@ namespace EcsLiteTestProject
             {
                 OnTriggerExitEvent onTriggerExitEvent = _onTriggerExitEventPool.Get(entity);
 
-                if (onTriggerExitEvent.senderGameObject.TryGetComponent(out OpenDoorButtonMonoEntity openDoorButtonLink) &&
+                if (onTriggerExitEvent.senderGameObject.TryGetComponent(out ConvertToEntity openDoorButtonLink) &&
                     onTriggerExitEvent.collider.CompareTag(Constants.Tags.Player))
                 {
                     if (openDoorButtonLink.TryGetEntity(out int buttonEntity))

@@ -1,5 +1,6 @@
 ﻿using Leopotam.EcsLite;
 using SevenBoldPencil.EasyEvents;
+using Voody.UniLeo.Lite;
 
 namespace EcsLiteTestProject
 {
@@ -29,14 +30,13 @@ namespace EcsLiteTestProject
             foreach (int eventBody in _eventsBus.GetEventBodies<ButtonPressedEvent>(out var buttonPressedEventPool))
             {
                 ref ButtonPressedEvent buttonPressedEvent = ref buttonPressedEventPool.Get(eventBody);
-                MonoEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonPressedEvent.Entity).DoorEntityLink;
-
+                ConvertToEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonPressedEvent.Entity).DoorEntityLink;
+                
                 if (doorEntityLink.TryGetEntity(out int entity))
                 {
                     _targetPositionMoveComponentPool.AddIfNone(entity);
                     ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionMoveComponentPool.Get(entity);
                     ref PingPongMoveComponent pingPongMoveComponent = ref _pingPongMoveComponentPool.Get(entity);
-
                     targetPositionMoveComponent.TargetPosition = pingPongMoveComponent.EndPosition;
                 }
             }
@@ -44,8 +44,8 @@ namespace EcsLiteTestProject
             foreach (int eventBody in _eventsBus.GetEventBodies<ButtonUnpressedEvent>(out var buttonUnpressedEventPool))
             {
                 ref ButtonUnpressedEvent buttonUnpressedEvent = ref buttonUnpressedEventPool.Get(eventBody);
-                MonoEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonUnpressedEvent.Entity).DoorEntityLink;
-                
+                ConvertToEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonUnpressedEvent.Entity).DoorEntityLink;
+
                 if (doorEntityLink.TryGetEntity(out int entity))
                 {
                     _targetPositionMoveComponentPool.DeleteIfHas(entity);

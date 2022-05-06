@@ -1,4 +1,3 @@
-using EcsLiteTestProject.Data;
 using EcsLiteTestProject.Fabrics;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
@@ -13,12 +12,6 @@ namespace EcsLiteTestProject
 {
     public sealed class EcsStartup : MonoBehaviour
     {
-        #region SharedData
-
-        [SerializeField] private PlayerData _playerData;
-
-        #endregion
-
         private EcsWorld _world;
         private EcsSystems _systems;
         private EcsSystems _fixedSystems;
@@ -85,7 +78,6 @@ namespace EcsLiteTestProject
             _sharedData = new SharedData
             {
                 EventsBus = new EventsBus(),
-                PlayerData = _playerData
             };
         }
 
@@ -134,7 +126,7 @@ namespace EcsLiteTestProject
         {
             AddSystem<CharacterAnimationSpeedSystem>();
         }
-        
+
         private void AddDoorMechanicsSystems()
         {
             AddSystem<ButtonPressSystem>();
