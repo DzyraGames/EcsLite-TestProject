@@ -151,7 +151,7 @@ namespace EcsLiteTestProject
 
         private void AddFixedSystem<Tsystem>() where Tsystem : IEcsSystem
         {
-            _systems.Add(_systemFactory.Create<Tsystem>());
+            _fixedSystems.Add(_systemFactory.Create<Tsystem>());
         }
     }
 }
