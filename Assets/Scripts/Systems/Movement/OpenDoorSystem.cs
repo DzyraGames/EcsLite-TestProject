@@ -1,6 +1,5 @@
 ﻿using Leopotam.EcsLite;
 using SevenBoldPencil.EasyEvents;
-using Voody.UniLeo.Lite;
 
 namespace EcsLiteTestProject
 {
@@ -12,49 +11,71 @@ namespace EcsLiteTestProject
 
         private EcsPool<TargetPositionMoveComponent> _targetPositionMoveComponentPool;
         private EcsPool<PingPongMoveComponent> _pingPongMoveComponentPool;
-        private EcsPool<OpenDoorButtonComponent> _openDoorButtonComponentPool;
+        private EcsPool<IdComponent> _idComponentPool;
+        private EcsPool<ConnectedIdComponent> _connectedIdComponentPool;
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
             _eventsBus = systems.GetShared<SharedData>().EventsBus;
-            _filter = _world.Filter<DoorComponent>().Inc<PingPongMoveComponent>().End();
+            _filter = _world.Filter<DoorComponent>().Inc<PingPongMoveComponent>().Inc<IdComponent>().End();
 
             _targetPositionMoveComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _pingPongMoveComponentPool = _world.GetPool<PingPongMoveComponent>();
-            _openDoorButtonComponentPool = _world.GetPool<OpenDoorButtonComponent>();
+            _idComponentPool = _world.GetPool<IdComponent>();
+            _connectedIdComponentPool = _world.GetPool<ConnectedIdComponent>();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (int eventBody in _eventsBus.GetEventBodies<ButtonPressedEvent>(out var buttonPressedEventPool))
             {
-                ref ButtonPressedEvent buttonPressedEvent = ref buttonPressedEventPool.Get(eventBody);
-                ConvertToEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonPressedEvent.Entity).DoorEntityLink;
-                
-                if (doorEntityLink.TryGetEntity(out int entity))
+                ButtonPressedEvent buttonPressedEvent = buttonPressedEventPool.Get(eventBody);
+                int buttonEntity = buttonPressedEvent.Entity;
+
+                if (!_connectedIdComponentPool.Has(buttonEntity))
+                    continue;
+
+                ConnectedIdComponent connectedIdComponent = _connectedIdComponentPool.Get(buttonEntity);
+
+                foreach (int doorEntity in _filter)
                 {
-                    _targetPositionMoveComponentPool.AddIfNone(entity);
-                    ref TargetPositionMoveComponent targetPositionMoveComponent = ref _targetPositionMoveComponentPool.Get(entity);
-                    ref PingPongMoveComponent pingPongMoveComponent = ref _pingPongMoveComponentPool.Get(entity);
-                    targetPositionMoveComponent.TargetPosition = pingPongMoveComponent.EndPosition;
+                    IdComponent idComponent = _idComponentPool.Get(doorEntity);
+                    if (idComponent.Id == connectedIdComponent.Id)
+                    {
+                        _targetPositionMoveComponentPool.AddIfNone(doorEntity);
+                        ref TargetPositionMoveComponent targetPositionMoveComponent =
+                            ref _targetPositionMoveComponentPool.Get(doorEntity);
+                        ref PingPongMoveComponent pingPongMoveComponent = ref _pingPongMoveComponentPool.Get(doorEntity);
+                        targetPositionMoveComponent.TargetPosition = pingPongMoveComponent.EndPosition;
+                    }
                 }
             }
 
             foreach (int eventBody in _eventsBus.GetEventBodies<ButtonUnpressedEvent>(out var buttonUnpressedEventPool))
             {
-                ref ButtonUnpressedEvent buttonUnpressedEvent = ref buttonUnpressedEventPool.Get(eventBody);
-                ConvertToEntity doorEntityLink = _openDoorButtonComponentPool.Get(buttonUnpressedEvent.Entity).DoorEntityLink;
+                ButtonUnpressedEvent buttonUnpressedEvent = buttonUnpressedEventPool.Get(eventBody);
+                int buttonEntity = buttonUnpressedEvent.Entity;
 
-                if (doorEntityLink.TryGetEntity(out int entity))
+                if (!_connectedIdComponentPool.Has(buttonEntity))
+                    continue;
+
+                ConnectedIdComponent connectedIdComponent = _connectedIdComponentPool.Get(buttonEntity);
+
+                foreach (int doorEntity in _filter)
                 {
-                    _targetPositionMoveComponentPool.DeleteIfHas(entity);
+                    IdComponent idComponent = _idComponentPool.Get(doorEntity);
+                    if (idComponent.Id == connectedIdComponent.Id)
+                    {
+                        _targetPositionMoveComponentPool.DeleteIfHas(doorEntity);
+                    }
                 }
             }
 
-            foreach (int eventBody in _eventsBus.GetEventBodies<TargetPositionReachedEvent>(out var targetPositionReachedEventsPool))
+            foreach (int eventBody in _eventsBus.GetEventBodies<TargetPositionReachedEvent>(
+                out var targetPositionReachedEventsPool))
             {
-                ref TargetPositionReachedEvent targetPositionReachedEvent = ref targetPositionReachedEventsPool.Get(eventBody);
+                TargetPositionReachedEvent targetPositionReachedEvent = targetPositionReachedEventsPool.Get(eventBody);
 
                 foreach (int doorEntity in _filter)
                 {
@@ -63,7 +84,6 @@ namespace EcsLiteTestProject
                         _eventsBus.NewEvent<DoorOpenedEvent>().Entity = doorEntity;
                     }
                 }
-                
             }
         }
     }
