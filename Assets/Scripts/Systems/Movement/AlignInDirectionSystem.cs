@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using EcsLiteTestProject.Services;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace EcsLiteTestProject
@@ -11,6 +12,13 @@ namespace EcsLiteTestProject
         private EcsPool<TransformComponent> _transformComponentPool;
         private EcsPool<DirectionComponent> _directionComponentPool;
         private EcsPool<RotationSpeedComponent> _turnSpeedComponentPool;
+
+        private ITimeService _timeService;
+
+        public AlignInDirectionSystem(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
 
         public void Init(EcsSystems systems)
         {
@@ -34,7 +42,7 @@ namespace EcsLiteTestProject
                 Quaternion currentRotation = transformComponent.Transform.localRotation;
                 Quaternion targetRotation = Quaternion.LookRotation(directionComponent.Direction, Vector3.up);
                 transformComponent.Transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation,
-                    rotationSpeedComponent.RotationSpeed * Time.deltaTime);
+                    rotationSpeedComponent.RotationSpeed * _timeService.DeltaTime);
             }
         }
     }

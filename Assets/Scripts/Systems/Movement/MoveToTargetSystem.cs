@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using EcsLiteTestProject.Services;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace EcsLiteTestProject
@@ -14,6 +15,13 @@ namespace EcsLiteTestProject
         private EcsPool<MoveSpeedComponent> _speedComponentPool;
         private EcsPool<DirectionComponent> _directionComponentComponentPool;
         private EcsPool<ConstantMoveSpeedComponent> _constantSpeedComponentPool;
+
+        private ITimeService _timeService;
+
+        public MoveToTargetSystem(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
 
         public void Init(EcsSystems systems)
         {
@@ -40,7 +48,7 @@ namespace EcsLiteTestProject
 
                 float currentSpeed = GetSpeed(entity);
                 transformComponent.Transform.position =
-                    Vector3.MoveTowards(currentPosition, targetPosition, currentSpeed * Time.deltaTime);
+                    Vector3.MoveTowards(currentPosition, targetPosition, currentSpeed * _timeService.DeltaTime);
 
                 if (transformComponent.Transform.position == targetPosition)
                 {

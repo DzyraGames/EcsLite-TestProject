@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using EcsLiteTestProject.Services;
+using Leopotam.EcsLite;
 using SevenBoldPencil.EasyEvents;
 using UnityEngine;
 
@@ -13,6 +14,13 @@ namespace EcsLiteTestProject
         private EcsPool<TargetMoveSpeedComponent> _targetSpeedComponentPool;
         private EcsPool<MoveSpeedComponent> _speedComponentPool;
         private EcsPool<AccelerationComponent> _accelerationComponentPool;
+
+        private ITimeService _timeService;
+
+        public SpeedAccelerationSystem(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
 
         public void Init(EcsSystems systems)
         {
@@ -38,7 +46,7 @@ namespace EcsLiteTestProject
                 ref MoveSpeedComponent moveSpeedComponent = ref _speedComponentPool.Get(entity);
 
                 moveSpeedComponent.Speed = Mathf.Lerp(moveSpeedComponent.Speed, targetMoveSpeedComponent.TargetSpeed,
-                    accelerationComponent.Acceleration * Time.deltaTime);
+                    accelerationComponent.Acceleration * _timeService.DeltaTime);
             }
         }
 

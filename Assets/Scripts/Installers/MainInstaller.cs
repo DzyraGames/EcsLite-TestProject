@@ -1,5 +1,6 @@
 ﻿using EcsLiteTestProject.Data;
 using EcsLiteTestProject.Fabrics;
+using EcsLiteTestProject.Services;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +14,7 @@ namespace EcsLiteTestProject
         public override void InstallBindings()
         {
             BindData();
+            BindServices();
             BindFactories();
             BindCamera();
         }
@@ -20,6 +22,11 @@ namespace EcsLiteTestProject
         private void BindData()
         {
             Container.Bind<CharacterData>().FromInstance(_characterData);
+        }
+
+        private void BindServices()
+        {
+            Container.BindInterfacesAndSelfTo<UnityTimeService>().AsSingle().NonLazy();
         }
 
         private void BindFactories()
