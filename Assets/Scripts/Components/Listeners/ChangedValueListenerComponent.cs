@@ -2,8 +2,8 @@
 
 namespace EcsLiteTestProject
 {
-    public struct ChangedValueListenerComponent<TStruct> where TStruct : struct
+    public struct ChangedValueListenerComponent<TComponent> where TComponent : struct
     {
-        public IChangedValueListener<TStruct> ChangedValueListener;
+        public IChangedValueListener<TComponent> ChangedValueListener;
     }
 }

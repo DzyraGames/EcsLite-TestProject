@@ -147,8 +147,8 @@ namespace EcsLiteTestProject
 
         private void AddEventSystems()
         {
-            AddSystem<PositionEventSystem>();
-            AddSystem<RotationEventSystem>();
+            AddSystem<ChangedValueEventSystem<PositionComponent>>();
+            AddSystem<ChangedValueEventSystem<RotationComponent>>();
         }
 
         private void AddSystem<TSystem>() where TSystem : IEcsSystem

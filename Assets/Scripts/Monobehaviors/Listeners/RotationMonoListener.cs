@@ -1,23 +1,11 @@
-﻿using EcsLiteTestProject.Interfaces;
-using Leopotam.EcsLite;
-using UnityEngine;
-using Voody.UniLeo.Lite;
-
-namespace EcsLiteTestProject
+﻿namespace EcsLiteTestProject
 {
-    public class RotationMonoListener : BaseMonoProvider, IEventListener, IRotationListener
+    public class RotationMonoListener : ChangedValueMonoListener<RotationComponent>
     {
-        private EcsPool<RotationListenerComponent> _rotationListenerComponentPool; 
+        public override void OnValueChanged(int entity, RotationComponent value)
+        {
+            transform.localRotation = value.Rotation;
+        }
         
-        public void AddListener(int entity, EcsWorld world)
-        {
-            _rotationListenerComponentPool = world.GetPool<RotationListenerComponent>();
-            _rotationListenerComponentPool.Add(entity).RotationListener = this;
-        }
-
-        public void OnRotationChanged(int entity, Quaternion rotation)
-        {
-            transform.rotation = rotation;
-        }
     }
 }
