@@ -1225,7 +1225,8 @@ PrefabInstance:
       propertyPath: value.DoorEntityLink
       value: 
       objectReference: {fileID: 1217427560}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7334136551459457819, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7c82db889bedcc8469933ecbe0aa5d67, type: 3}
 --- !u!4 &970572755 stripped
 Transform:
@@ -2025,6 +2026,35 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6452933212880437153, guid: 86ad1e53f8b6fbc42b07350111cf7b2d, type: 3}
   m_PrefabInstance: {fileID: 1467550438}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1829000462 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4565840980123711835, guid: 8fa70d475acacbc409b0f59b1b3e5a6a, type: 3}
+  m_PrefabInstance: {fileID: 4565840980692653239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1829000470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829000462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f9d9743c6346a2823247437b726433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1829000471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829000462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08906ae9f09f45d1bf7d8f3de6ac931e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1976814488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2499,6 +2529,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5474712143866511770, guid: c49a25b8e579fb241a33ae8ae9771eb4, type: 3}
+      propertyPath: _positionMonoListener
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474712143866511770, guid: c49a25b8e579fb241a33ae8ae9771eb4, type: 3}
+      propertyPath: _positionMonoListeners.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474712143866511770, guid: c49a25b8e579fb241a33ae8ae9771eb4, type: 3}
+      propertyPath: _positionMonoListeners.Array.data[0].data
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474712143866511770, guid: c49a25b8e579fb241a33ae8ae9771eb4, type: 3}
+      propertyPath: _positionMonoListeners.Array.data[1].data
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5474712143866511771, guid: c49a25b8e579fb241a33ae8ae9771eb4, type: 3}
       propertyPath: m_RootOrder
       value: 2

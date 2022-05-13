@@ -10,7 +10,7 @@ namespace EcsLiteTestProject
         private SharedData _sharedData;
         private EcsFilter _filter;
 
-        private EcsPool<TransformComponent> _transformComponentPool;
+        private EcsPool<PositionComponent> _positionComponentPool; 
         private EcsPool<TargetPositionMoveComponent> _targetPositionComponentPool;
         private EcsPool<MoveSpeedComponent> _speedComponentPool;
         private EcsPool<DirectionComponent> _directionComponentComponentPool;
@@ -27,9 +27,9 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
             _sharedData = systems.GetShared<SharedData>();
-            _filter = _world.Filter<TransformComponent>().Inc<TargetPositionMoveComponent>().End();
+            _filter = _world.Filter<PositionComponent>().Inc<TargetPositionMoveComponent>().End();
 
-            _transformComponentPool = _world.GetPool<TransformComponent>();
+            _positionComponentPool = _world.GetPool<PositionComponent>();
             _targetPositionComponentPool = _world.GetPool<TargetPositionMoveComponent>();
             _speedComponentPool = _world.GetPool<MoveSpeedComponent>();
             _directionComponentComponentPool = _world.GetPool<DirectionComponent>();
@@ -40,17 +40,17 @@ namespace EcsLiteTestProject
         {
             foreach (int entity in _filter)
             {
-                ref TransformComponent transformComponent = ref _transformComponentPool.Get(entity);
+                ref PositionComponent positionComponent = ref _positionComponentPool.Get(entity);
                 TargetPositionMoveComponent targetPositionMoveComponent = _targetPositionComponentPool.Get(entity);
 
-                Vector3 currentPosition = transformComponent.Transform.position;
+                Vector3 currentPosition = positionComponent.Position;
                 Vector3 targetPosition = targetPositionMoveComponent.TargetPosition;
 
                 float currentSpeed = GetSpeed(entity);
-                transformComponent.Transform.position =
+                positionComponent.Position =
                     Vector3.MoveTowards(currentPosition, targetPosition, currentSpeed * _timeService.DeltaTime);
 
-                if (transformComponent.Transform.position == targetPosition)
+                if (positionComponent.Position == targetPosition)
                 {
                     _targetPositionComponentPool.Del(entity);
                     _directionComponentComponentPool.DeleteIfHas(entity);

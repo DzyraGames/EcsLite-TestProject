@@ -9,7 +9,7 @@ namespace EcsLiteTestProject
         private EcsWorld _world;
         private EcsFilter _filter;
 
-        private EcsPool<TransformComponent> _transformComponentPool;
+        private EcsPool<RotationComponent> _rotationComponentPool; 
         private EcsPool<DirectionComponent> _directionComponentPool;
         private EcsPool<RotationSpeedComponent> _turnSpeedComponentPool;
 
@@ -24,9 +24,9 @@ namespace EcsLiteTestProject
         {
             _world = systems.GetWorld();
 
-            _filter = _world.Filter<TransformComponent>().Inc<DirectionComponent>().Inc<RotationSpeedComponent>().End();
+            _filter = _world.Filter<RotationComponent>().Inc<DirectionComponent>().Inc<RotationSpeedComponent>().End();
 
-            _transformComponentPool = _world.GetPool<TransformComponent>();
+            _rotationComponentPool = _world.GetPool<RotationComponent>();
             _directionComponentPool = _world.GetPool<DirectionComponent>();
             _turnSpeedComponentPool = _world.GetPool<RotationSpeedComponent>();
         }
@@ -35,13 +35,13 @@ namespace EcsLiteTestProject
         {
             foreach (int entity in _filter)
             {
-                ref TransformComponent transformComponent = ref _transformComponentPool.Get(entity);
+                ref RotationComponent rotationComponent = ref _rotationComponentPool.Get(entity);
                 DirectionComponent directionComponent = _directionComponentPool.Get(entity);
                 RotationSpeedComponent rotationSpeedComponent = _turnSpeedComponentPool.Get(entity);
 
-                Quaternion currentRotation = transformComponent.Transform.localRotation;
+                Quaternion currentRotation = rotationComponent.Rotation;
                 Quaternion targetRotation = Quaternion.LookRotation(directionComponent.Direction, Vector3.up);
-                transformComponent.Transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation,
+                rotationComponent.Rotation = Quaternion.RotateTowards(currentRotation, targetRotation,
                     rotationSpeedComponent.RotationSpeed * _timeService.DeltaTime);
             }
         }

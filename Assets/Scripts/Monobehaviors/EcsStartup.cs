@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using EcsLiteTestProject.Fabrics;
+using EcsLiteTestProject.Interfaces;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
@@ -12,6 +14,8 @@ namespace EcsLiteTestProject
 {
     public sealed class EcsStartup : MonoBehaviour
     {
+        [SerializeField] private PositionMonoListener _transformMonoListener;
+
         private EcsWorld _world;
         private EcsSystems _systems;
         private EcsSystems _fixedSystems;
@@ -95,6 +99,7 @@ namespace EcsLiteTestProject
         private void AddSystems()
         {
             AddDebugSystems();
+            AddEventSystems();
             AddInputSystems();
             AddMovementSystems();
             AddDoorMechanicsSystems();
@@ -142,6 +147,12 @@ namespace EcsLiteTestProject
             _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<ButtonUnpressedEvent>());
             _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<TargetPositionReachedEvent>());
             _systems.Add(eventsBus.GetDestroyEventsSystem().IncReplicant<DoorOpenedEvent>());
+        }
+
+        private void AddEventSystems()
+        {
+            AddSystem<PositionEventSystem>();
+            AddSystem<RotationEventSystem>();
         }
 
         private void AddSystem<TSystem>() where TSystem : IEcsSystem

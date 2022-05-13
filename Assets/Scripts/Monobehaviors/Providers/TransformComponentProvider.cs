@@ -5,16 +5,22 @@ namespace EcsLiteTestProject
 {
     public class TransformComponentProvider : BaseMonoProvider, IConvertToEntity
     {
-        
-        private EcsPool<TransformComponent> _transformComponentPool; 
+        private EcsPool<PositionComponent> _positionComponentPool;
+        private EcsPool<RotationComponent> _rotationComponentPool; 
         
         public void Convert(int entity, EcsWorld world)
         {
-            _transformComponentPool = world.GetPool<TransformComponent>();
-            _transformComponentPool.AddIfNone(entity);
+            _positionComponentPool = world.GetPool<PositionComponent>();
+            _rotationComponentPool = world.GetPool<RotationComponent>();
             
-            ref TransformComponent transformComponent = ref _transformComponentPool.Get(entity);
-            transformComponent.Transform = transform;
+            _positionComponentPool.AddIfNone(entity);
+            _rotationComponentPool.AddIfNone(entity);
+
+            ref PositionComponent positionComponent = ref _positionComponentPool.Get(entity);
+            ref RotationComponent rotationComponent = ref _rotationComponentPool.Get(entity);
+
+            positionComponent.Position = transform.position;
+            rotationComponent.Rotation = transform.localRotation;
         }
     }
 }
