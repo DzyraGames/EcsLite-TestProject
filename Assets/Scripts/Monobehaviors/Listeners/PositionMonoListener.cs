@@ -1,23 +1,10 @@
-﻿using EcsLiteTestProject.Interfaces;
-using Leopotam.EcsLite;
-using UnityEngine;
-using Voody.UniLeo.Lite;
-
-namespace EcsLiteTestProject
+﻿namespace EcsLiteTestProject
 {
-    public class PositionMonoListener : BaseMonoProvider, IEventListener, IPositionListener
+    public class PositionMonoListener : ChangedValueMonoListener<PositionComponent>
     {
-        private EcsPool<PositionListenerComponent> _positionListenerComponentPool;
-
-        public void AddListener(int entity, EcsWorld world)
+        public override void OnValueChanged(int entity, PositionComponent value)
         {
-            _positionListenerComponentPool = world.GetPool<PositionListenerComponent>();
-            _positionListenerComponentPool.Add(entity).PositionListener = this;
-        }
-
-        public void OnPositionChanged(int entity, Vector3 position)
-        {
-            transform.position = position;
+            transform.position = value.Position;
         }
     }
 }

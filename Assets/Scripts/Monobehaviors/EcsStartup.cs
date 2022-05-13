@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using EcsLiteTestProject.Fabrics;
-using EcsLiteTestProject.Interfaces;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
@@ -14,8 +12,6 @@ namespace EcsLiteTestProject
 {
     public sealed class EcsStartup : MonoBehaviour
     {
-        [SerializeField] private PositionMonoListener _transformMonoListener;
-
         private EcsWorld _world;
         private EcsSystems _systems;
         private EcsSystems _fixedSystems;
